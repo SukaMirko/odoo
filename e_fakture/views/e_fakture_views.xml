@@ -1,0 +1,112 @@
+<!-- e_fakture_views.xml -->
+
+<odoo>
+    <data>
+
+        <record id="view_e_fakture_form" model="ir.ui.view">
+            <field name="name">e_fakture.form</field>
+            <field name="model">e_fakture.e_fakture</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group>
+                        <field name="date_from"/>
+                        <field name="date_to"/>
+                    </group>
+                    <button string="Import Vendor Bills" type="object" class="oe_highlight"
+                            name="import_vendor_bills"/>
+                     <notebook>
+                        <page string="Vendor Bills">
+                            <field name="vendor_bill_ids" widget="one2many_list"/>
+                        </page>
+                    </notebook>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_e_fakture_settings_form" model="ir.ui.view">
+            <field name="name">e_fakture.settings.form</field>
+            <field name="model">res.config.settings</field>
+            <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[hasclass('settings')]" position="inside">
+                    <div class="app_settings_block" data-string="E Fakture" data-key="e_fakture"
+                         string="E Fakture Settings">
+                        <div class="row mt16 o_settings_container" id="e_fak_settings" >
+                            <div class="col-12 col-lg-6 o_setting_box" >
+                                <div class="o_setting_right_pane" >
+                                    <label for="e_api_key"/>
+                                    <field name="e_api_key" widget="password"/>
+                                    <div class="text-muted" >
+                                        Insert your API key from E Fakture
+                                   </div>
+                               </div>
+                           </div>
+                        </div>
+                        <div class="row mt16 o_settings_container" id="e_fak_settings" >
+                            <div class="col-12 col-lg-6 o_setting_box" >
+                                <div class="o_setting_right_pane" >
+                                    <label for="e_status"/>
+                                    <field name="e_status"/>
+                                    <div class="text-muted" >
+                                        Select default status to import
+                                   </div>
+                               </div>
+                           </div>
+                       </div>
+                        <div class="row mt16 o_settings_container" id="e_fak_accaount" >
+                            <div class="col-12 col-lg-6 o_setting_box" >
+                                <div class="o_setting_right_pane" >
+                                    <label for="e_account_id"/>
+                                    <field name="e_account_id"/>
+                                    <div class="text-muted" >
+                                        Select default account for Product
+                                   </div>
+                               </div>
+                           </div>
+                       </div>
+                   </div>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="action_e_settings" model="ir.actions.act_window">
+            <field name="name">Settings</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">res.config.settings</field>
+            <field name="view_id" ref="view_e_fakture_settings_form"/>
+            <field name="view_mode">form</field>
+            <field name="target">inline</field>
+            <field name="context">{'module' : 'e_fakture', 'bin_size': False}</field>
+         </record>
+
+        <record id="action_e_fakture_form" model="ir.actions.act_window">
+            <field name="name">E Fakture</field>
+            <field name="res_model">e_fakture.e_fakture</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="e_fakture.view_e_fakture_form"/>
+            <field name="target">new</field>
+        </record>
+
+        <record id="view_e_fakture_account_form" model="ir.ui.view">
+            <field name="name">e_fakture.account.form</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="account.view_partner_property_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//group[@name='accounting_entries']" position="inside">
+                        <field name="account_id_e"/>
+                </xpath>
+            </field>
+        </record>
+
+
+        <menuitem id="menu_e_fakture" name="E Fakture" parent="account.menu_finance"
+                  sequence="40"/>
+
+        <menuitem action="action_e_fakture_form" id="menu_import_vendor_bills" name="Import Vendor Bills" parent="menu_e_fakture"
+                  sequence="10" />
+
+        <menuitem action="action_e_settings" id="menu_e_fakture_settings" name="Settings" parent="menu_e_fakture"
+                  sequence="20" />
+
+    </data>
+</odoo>
